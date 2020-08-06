@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.cboard.dao.UserBranchDao">
+
+    <select id="getBranchAuth" parameterType="java.lang.String" resultType="java.lang.String">
+       select auth
+            from
+              (
+                select role.resources_id as auth
+                from yg_base_role_resources role  where role.role_id in (
+                                select userrole.rolecode  from  yg_base_account  account
+                                left join yg_userrole userrole
+                                on userrole.username = account.id where account.loginname = #{loginName,jdbcType=VARCHAR})
+                      and role.type = 8
+              ) as t
+    </select>
+    <select id="getSiteAuth" parameterType="java.lang.String" resultType="java.lang.String">
+       select auth
+            from
+              (
+                select role.resources_id as auth
+                from yg_base_role_resources role  where role.role_id in (
+                                select userrole.rolecode  from  yg_base_account  account
+                                left join yg_userrole userrole
+                                on userrole.username = account.id where account.loginname = #{loginName,jdbcType=VARCHAR})
+                      and role.type = 9
+              ) as t
+    </select>
+
+    <select id="getAllSite" resultType="java.lang.String">
+        select branchCode
+        from yg_base_org
+        where dr != 1 and iscompany = '01'
+    </select>
+
+    <select id="getAllBranch" resultType="java.lang.String">
+        select branchCode
+        from yg_base_org
+        where dr != 1 and iscompany != '01'
+    </select>
+
+    <select id="getCheckUpAuth" parameterType="java.lang.String" resultType="java.lang.String">
+       select auth
+            from
+              (
+                select role.resources_id as auth
+                from yg_base_role_resources role  where role.role_id in (
+                                select userrole.rolecode  from  yg_base_account  account
+                                left join yg_userrole userrole
+                                on userrole.username = account.id where account.loginname = #{loginName,jdbcType=VARCHAR})
+                      and role.type = 6
+              ) as t
+    </select>
+
+</mapper>
